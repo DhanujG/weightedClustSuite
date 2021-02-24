@@ -23,7 +23,7 @@
 #' plotMDS(irisClust)
 #' split(iris[,5], irisClust$clusters)
 #'
-#' @useDynLib ClustObj
+#' @useDynLib weightedClustSuite
 #' @importFrom Rcpp sourceCpp
 #' 
 '_PACKAGE'
