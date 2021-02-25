@@ -265,7 +265,7 @@ ClustObj <- function(orig, weights, distance, dc, gaussian=FALSE, verbose = FALS
   res
 }
 
-
+#' @export
 plotDensityPeak <- function(x, ...) {
   UseMethod('plotDensityPeak')
 }
@@ -290,7 +290,7 @@ plotDensityPeak.ClusteringObject <- function(x, ...) {
 #' irisClust <- findDensityPeakClusters(irisClust, rho=2, delta=2)
 #' plotMDS(irisClust)
 #' split(iris[,5], irisClust$clusters)
-
+#' @export
 plotMDS <- function(x, ...) {
   UseMethod('plotMDS')
 }
@@ -347,7 +347,7 @@ plotMDS.ClusteringObject <- function(x, ...) {
   }
   
 }
-
+#' @export
 plotDensityPeak2D <- function(x, ...) {
   UseMethod('plotDensityPeak2D')
 }
@@ -412,6 +412,7 @@ plotDensityPeak2D.ClusteringObject <- function(x, ...) {
 #' irisClust <- findDensityPeakClusters(irisClust, rho=2, delta=2)
 #' plotTSNE(irisClust)
 #' split(iris[,5], irisClust$clusters)
+#' @export
 plotTSNE <- function(x, ...) {
   UseMethod('plotTSNE')
 }
@@ -504,7 +505,7 @@ plotSPECTRAL.ClusteringObject <- function(x, ...) {
   }
   
 }
-
+#' @export
 plot2DCluster <- function(x, ...) {
   UseMethod('plot2DCluster')
 }
@@ -1114,6 +1115,7 @@ findDensityPeakCluster_validationChart.ClusteringObject <- function(x, rho_step 
   with(eigen(M), vectors %*% (values^power * solve(vectors)))
 
 
+#' @export
 findSpectralClusters <- function(x, ...) {
   UseMethod("findSpectralClusters")
 }
@@ -1217,7 +1219,7 @@ findKMediodsClusters.ClusteringObject <- function(x, neighbors, ...) {
 
 
 
-
+#' @export
 findDBSCANClusters <- function(x, eps, ...) {
   UseMethod("findDBSCANClusters")
 }
@@ -1331,6 +1333,7 @@ labels.ClusteringObject <- function(object, ...) {
 #' @noRd
 #' 
 #' @importFrom FNN get.knn
+
 ClustObj.knn <- function(mat, k = NULL, verbose = T, ...) {
   if (is.null(k)) {
     k <- round(sqrt(nrow(mat)) / 2) # empirical way to select the number of neighbor points 

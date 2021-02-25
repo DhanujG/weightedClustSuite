@@ -1,0 +1,53 @@
+---
+title: "weightedClustSuite_Showcase_Examples_Testing"
+author: "Dhanuj Gandikota"
+date: "2/24/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Intro
+
+Thanks for checking out my opensource package weightedClustSuite, developed by myself.
+
+This package was created to easily implement weighted point density clustering and validation. In my package, one can easily give their datapoints weights and then see the results shown and validated with multiple unsupervised clustering algorithms. This is all done through a single clustering object making the data, ex. different clustering assignments, very easy to access.
+
+## Current clustering algorithms currently implemented with weights in the package
+
+#### Density Based Unsupervised Clustering
+*Density Peak Clustering (DOI: 10.1126/science.1242072, 2014)
+*Density-based spatial clustering of applications with noise (DOI: 10.5120/739-1038, 1996)
+#### Partitioning Based Unsupervised Clustering
+*K-Mediods Clustering (https://doi.org/10.1016/j.eswa.2008.01.039, 2008)
+*Spectral Clustering (DOI: 10.5555/2980539.2980649, 2001)
+
+
+# Examples of Package Utilization
+
+We will use the package on a dataset currently under research. This dataset represents a 2 species trait values and the species abundance for each species. The data is presented in 3 columns, 2 of which are the species trait values and the third are the WEIGHTS (species abundance)
+
+### Create input Data & Weight & Distance Matrices
+```{r}
+
+# Read in the Data
+Colnames = c('X','Y','Weight')
+Species_Data <- read.csv(file.choose(), header = FALSE)
+
+#Create Input Matrices for the package
+Trait_Species <- as.vector(Species_Data[,1:2])
+Weight_Species <- as.vector(Species_Data[,3])
+Dist_Species <- dist(Species_Data[,1:2])
+view(Trait_Species)
+Weight_Species
+```
+
+
+### Call the package and create the overall Clustering Object
+```{r}
+library()
+```
+
+
