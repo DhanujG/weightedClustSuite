@@ -1,5 +1,5 @@
 Package: weightedClustSuite
-Title: What the Package Does (One Line, Title Case)
+Title: Weighted Point Density Clustering and Validation Suite
 Version: 0.0.0.9000
 Authors@R: 
     person(given = "Dhanuj",
@@ -7,7 +7,7 @@ Authors@R:
            role = c("aut", "cre"),
            email = "dhanujg@umich.edu",
            comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
+Description: This package was created to easily perform weighted point density clustering and validation. In my package, one can easily give their datapoints weights and then see the results shown and validated with multiple unsupervised clustering algorithms. This is all done through a single clustering object making the data, ex. different clustering assignments, very easy to access.
 License: `use_mit_license()`, `use_gpl3_license()` or friends to
     pick a license
 Encoding: UTF-8

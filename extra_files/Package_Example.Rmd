@@ -1,8 +1,10 @@
 ---
-title: "weightedClustSuite_Showcase_Examples_Testing"
+title: "weightedClustSuite Instructions and Showcase"
 author: "Dhanuj Gandikota"
 date: "2/24/2021"
-output: html_document
+output:
+  html_document: default
+  pdf_document: default
 ---
 
 ```{r setup, include=FALSE}
@@ -15,14 +17,23 @@ Thanks for checking out my opensource package weightedClustSuite, developed by m
 
 This package was created to easily implement weighted point density clustering and validation. In my package, one can easily give their datapoints weights and then see the results shown and validated with multiple unsupervised clustering algorithms. This is all done through a single clustering object making the data, ex. different clustering assignments, very easy to access.
 
+The package operates through my implementation of manipulating the gaussian density estimates and distance matrices with the weights, prior to the bulk of each clustering algorithm. This performs more EFFICIENTLY and can allow for much LARGER weighted datasets than the brute force alternative of manually adding each points weight to the dataset.
+
+```{r}
+#Run this command to install the package on your machine
+#devtools::install_github("dhanujg/weightedClustSuite")
+```
+
+
 ## Current clustering algorithms currently implemented with weights in the package
 
 #### Density Based Unsupervised Clustering
-*Density Peak Clustering (DOI: 10.1126/science.1242072, 2014)
-*Density-based spatial clustering of applications with noise (DOI: 10.5120/739-1038, 1996)
+* Density Peak Clustering (DOI: 10.1126/science.1242072, 2014)
+* Density-based spatial clustering of applications with noise (DOI: 10.5120/739-1038, 1996)
+
 #### Partitioning Based Unsupervised Clustering
-*K-Mediods Clustering (https://doi.org/10.1016/j.eswa.2008.01.039, 2008)
-*Spectral Clustering (DOI: 10.5555/2980539.2980649, 2001)
+* K-Mediods Clustering (https://doi.org/10.1016/j.eswa.2008.01.039, 2008)
+* Spectral Clustering (DOI: 10.5555/2980539.2980649, 2001)
 
 
 # Examples of Package Utilization
@@ -40,14 +51,80 @@ Species_Data <- read.csv(file.choose(), header = FALSE)
 Trait_Species <- as.vector(Species_Data[,1:2])
 Weight_Species <- as.vector(Species_Data[,3])
 Dist_Species <- dist(Species_Data[,1:2])
-view(Trait_Species)
-Weight_Species
+Trait_Species[1:5,]
+Weight_Species[1:5]
+
 ```
 
 
 ### Call the package and create the overall Clustering Object
 ```{r}
-library()
+library(weightedClustSuite)
+
+#feed in the input data to create the base clustering object with ClustObj function
+SpeciesClust <- ClustObj(Trait_Species, Weight_Species, Dist_Species, gaussian=TRUE, verbose = TRUE)
+
 ```
 
+### Quick Run of Clustering Algorithms
+
+We can now update the clustering object (SpeciesClust) with data from a clustering algorithm, here we will run K mediods and Spectral to get a quick visualization of the data.
+
+```{r}
+#SpeciesClust <- findDensityPeakClusters(SpeciesClust, rho=4.01, delta=0.21)
+SpeciesClust <- findKMediodsClusters(SpeciesClust, neighbors = 5 )
+SpeciesClust <- findSpectralClusters(SpeciesClust, neighbors = 5 )
+SpeciesClust <- findDBSCANClusters(SpeciesClust, eps = 0.05)
+```
+
+We can also create plots of each of the clustering assignments WITH the datapoint sizes changing corresponding to the weights
+```{r}
+KMediods_2D <- plot2DCluster(SpeciesClust, SpeciesClust$clustersKmediods, type = 'Kmediods')
+Spectral_2D <- plot2DCluster(SpeciesClust, SpeciesClust$clustersSpectral, type = 'Spectral')
+```
+
+clustering assignments are also stored in the class object and can be viewed in examples like 
+```{r}
+SpeciesClust$clustersKmediods[1:10]
+```
+
+## Detailed Clustering and Validation : Example using 2014 Density Peak Clustering
+
+#Here I will go through the full training and implementation of performing Weighted Density Peak Cluster by Rodriguez et al. 2014. 
+
+Create a Validation chart to test various rho/delta combinations and obtain ideal classification score
+```{r}
+
+SpeciesChart <- findDensityPeakCluster_validationChart(SpeciesClust, DBCV = FALSE, status = FALSE)
+View(SpeciesChart[1:5,])
+```
+
+We can also visualize the density peaks by rho/delta values in this plot
+```{r}
+plotDensityPeak(SpeciesClust)
+```
+from the validation chart, we have chosen this specific rho/delta combination to give us 5 clusters with no unclassified points, we can then run the Density Peak clustering
+```{r}
+SpeciesClust <- findDensityPeakClusters(SpeciesClust, rho=4.01, delta=0.21, verbose = FALSE)
+```
+
+Now we can plot our clustering assignments through a 2D Graph, a MDS graph (for higher dimensions), and a TSNE Graph. The cross marks indicate the cluster centers and the size of the points correspond to the weights.
+```{r}
+DensityPeak_2D = plotDensityPeak2D(SpeciesClust)
+DensityPeak_MDS = plotMDS(SpeciesClust)
+DensityPeak_TSNE = plotTSNE(SpeciesClust)
+```
+
+
+###Model Comparison
+
+We can compare the results of our Density Peak Clustering, with DBSCAN clustering utilizing the same weighted distance cutoff for epsilon.
+```{r}
+DensityPeak_2D = plotDensityPeak2D(SpeciesClust)
+
+DBSCAN_2D = plot2DCluster(SpeciesClust, SpeciesClust$clustersDBSCAN, type = 'DBSCAN')
+```
+
+### Future
+There is a lot more to be added to the package and still currently being edited for implementation. Please email me at dhanujg@umich.edu if you have any questions.
 
